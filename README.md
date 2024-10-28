@@ -1,2 +1,4 @@
 # FACTS
-Implementation of "FACTS: A Factored State-Space Framework For World Modelling"
+Implementation of "FACTS: A Factored State-Space Framework For World Modelling"  
+
+Coming soon ...
