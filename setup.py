@@ -8,7 +8,12 @@ deps = [
 setup(
     name = 'facts_ssm',
     packages = find_packages(
-        exclude=['demos/scripts', 'demos/scripts/*']        
+        exclude=[
+            'demos/scripts',
+            'demos/scripts/*',
+            'assets',
+            'assets/*',
+        ]        
     ),
     version = '0.1.0',
     license='MIT',
