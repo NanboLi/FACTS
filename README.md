@@ -2,8 +2,7 @@
 PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Modelling](https://arxiv.org/abs/2410.20922)" (accepted at **ICLR 2025**)\
 (Full release coming soon).
 
-<embed src="assets/FACTS.pdf" width="800px" />
-
+![](assets/FACTS.jpg?raw=true)
 
 ## Installation:
 1.  (Recommended) Install your dependencies, especially [pytorch](https://pytorch.org/):
