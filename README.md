@@ -10,9 +10,9 @@ PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Mo
         'pytorch>=2.1.0'
         'einops>=0.8.0'
    ``` 
-2.  In a terminal, ```cd``` to ```FACTS_dev/```, and run ```pip install -e .```
+2.  In a terminal, ```cd``` to ```FACTS/```, and run ```pip install -e .```
 3. (Optional) Test your installation:\
-    Under ```FACTS_dev/```, run
+    Under ```FACTS/```, run
     ```
         . demos/scripts/test_0.sh
         . demos/scripts/test_1.sh
