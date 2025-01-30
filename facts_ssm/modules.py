@@ -229,7 +229,7 @@ class FACTS(nn.Module):
         elif self.init_method == 'spherical':
             mu = self.slots_mu.expand(bs, -1, -1)
             sigma = self.slots_log_sigma.exp().expand(bs, -1, -1)
-            z = mu + sigma * torch.randn_like(mu.shape, device=x.device, dtype=x.dtype)  # [B, K, D]
+            z = mu + sigma * torch.randn_like(mu, device=x.device, dtype=x.dtype)  # [B, K, D]
             z = z.unsqueeze(1)  # [B, 1, K, D]
         else:
             raise ValueError(f"Invalid init_method: {self.init_method}")
