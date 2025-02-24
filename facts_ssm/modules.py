@@ -171,6 +171,7 @@ class FACTS(nn.Module):
             head_dim = slot_size // num_heads
         else:
             head_dim = slot_size
+
         self.router = build_router(
             router,
             num_slots=num_factors, 
