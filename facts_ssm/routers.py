@@ -65,9 +65,9 @@ class SoftmaxAttentionRouter(nn.Module):
         self.to_k = to_k or nn.Linear(dim, self.head_dim*n_heads, bias=proj_bias)
         self.to_v = to_v or nn.Linear(dim, self.head_dim*n_heads, bias=proj_bias)
 
-        n_groups = aug_dim // dim
+        n_groups = aug_dim // dim  # assuming dt_rank=B_rank=C_rank=slot_size
         if aug_dim > 0:
-            n_groups = aug_dim // dim  # assuming dt_rank=B_rank=C_rank=slot_size
+            # n_groups = aug_dim // dim  # assuming dt_rank=B_rank=C_rank=slot_size
             self.to_v_aug = to_v_aug or nn.Sequential(
                 nn.GroupNorm(num_channels=aug_dim, num_groups=n_groups),
                 nn.Conv1d(

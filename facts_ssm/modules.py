@@ -126,7 +126,7 @@ class FACTS(nn.Module):
             dropout (float): dropout rate.
             router (str): router type.
             init_method (str): memory initialisation method.
-            fast_mode (bool): whether to use fast mode.
+            fast_mode (bool): whether to use fast/fully-parallel mode.
             slim_mode (bool): whether to use slim mode. head_dim=slot_size//num_heads if slim_mode else head_dim=slot_size.
             C_rank (int): rank of the C projection (options: [0, 1, D]). 0 for no C-selective projection.
             residual (bool): whether to use residual connection, not supported for M != K     
