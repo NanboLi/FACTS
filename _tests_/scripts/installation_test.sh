@@ -1,6 +1,6 @@
 # Run this script to test the installation of FACTS
 
-python -m demos._tests_.test_0 \
+python -m _tests_.test_0 \
   --enc_in 32 \
   --num_factors 32 \
   --slot_size 8 \

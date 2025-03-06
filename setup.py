@@ -9,13 +9,13 @@ setup(
     name = 'facts_ssm',
     packages = find_packages(
         exclude=[
-            'demos/scripts',
-            'demos/scripts/*',
+            '_tests_/scripts',
+            '_tests_/scripts/*',
             'assets',
             'assets/*',
         ]        
     ),
-    version = '0.1.0',
+    version = '0.1.1',
     license='MIT',
     description = 'FACTS: a FACTored State-space framework for world modelling',
     long_description_content_type = 'text/markdown',

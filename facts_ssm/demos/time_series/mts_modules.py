@@ -1,19 +1,17 @@
 """
-Multivariate Time Series (MTS) Modules for FACTS.
+Multivariate Time Series (MTS) Modelling Modules for FACTS.
 
 Any use of this code should cite the following paper:
     FACTS: A Factored State-Space Framework For World Modelling
 
 Author: Nanbo Li (linanbo2008@gmail.com)
 """
-import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from einops import rearrange, repeat, einsum
+from einops import rearrange
 from facts_ssm.utils import RMSNorm
 from typing import Dict, List
-import pdb
 
 
 # ============================
