@@ -10,7 +10,7 @@ import os, sys
 import argparse
 import torch
 from facts_ssm import FACTS
-from facts_ssm.utils import *
+from facts_ssm import time_series as fts
 
 
 def prt_config(cfg):
