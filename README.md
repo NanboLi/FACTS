@@ -16,7 +16,7 @@ PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Mo
     ```
         . demos/scripts/installation_test.sh
     ```
-    If you see `Good to go!`, you are Good to go:ok_hand:!
+    If you see `Good to go!`, you are Good to go!
 
 ## Usage:
 We provide only three examples to show its usage, for now, more details and [DEMOS](#demos) will be released later. Stay tuned, until then... 
