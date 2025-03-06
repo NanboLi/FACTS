@@ -3,27 +3,20 @@ Attention-based (LPI &. RPE) routers for the FACTS model.
 
 Included routers:
     - SoftmaxAttentionRouter: The attention-based router with softmax attention.
-    - LinearAttentionRouter: The attention-based router with linear attention.
+    - # LinearAttentionRouter: The attention-based router with linear attention.
     - SlotAttentionRouter: The attention-based router with slot attention.
+
+Any use of this code should cite the following paper:
+    FACTS: A Factored State-Space Framework For World Modelling
 
 Author: Nanbo Li (linanbo2008@gmail.com)
 """
-import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from einops import rearrange, repeat, einsum
-import pdb
-
-
-def _getchk(tch_tensor, s:int, t:int, batch_size:int):
-    if tch_tensor is None:
-        return None
-    if tch_tensor.size(0) == batch_size:
-        return tch_tensor[s:t]
-    else:
-        n_folds = batch_size // tch_tensor.size(0)
-        return repeat(tch_tensor, 'b ... -> (b n) ...', n=n_folds)[s:t]  # [N, ...]
+from einops import rearrange, repeat
+from facts_ssm.utils import _getchk
+# import pdb
 
 
 class SoftmaxAttentionRouter(nn.Module):

@@ -1,21 +1,20 @@
 # FACTS
-PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Modelling](https://arxiv.org/abs/2410.20922)" (accepted at **ICLR 2025**)\
-(Full release coming soon).
+PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Modelling](https://arxiv.org/abs/2410.20922)" (accepted at **ICLR 2025**)
 
 ![](assets/FACTS.jpg?raw=true)
 
 ## Installation:
-1.  (Recommended) Install your dependencies, especially [pytorch](https://pytorch.org/):
+1. Install your dependencies, especially [pytorch](https://pytorch.org/):
    ```
         'pytorch>=2.1.0'
         'einops>=0.8.0'
-   ``` 
-2.  In a terminal, ```cd``` to ```FACTS/```, and run ```pip install -e .```
+   ```
+    You may find [Conda](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) a useful tool for managing your virtual environment!
+2. In a terminal, ```cd``` to ```FACTS/```, and run ```pip install -e .```
 3. (Optional) Test your installation:\
     Under ```FACTS/```, run
     ```
-        . demos/scripts/test_0.sh
-        . demos/scripts/test_1.sh
+        . demos/scripts/installation_test.sh
     ```
     If both tests are passed, you are GOOD TO GO!
 
@@ -89,8 +88,8 @@ We provide only three examples to show its usage, for now, more details and [DEM
 ```
 
 ## Demos:
-Coming soon ...
-
+1. See [Multivariate Time Series Forecasting (MTSF)](./demos/time_series/)
+2. coming soon ...
 
 
 ## Contact

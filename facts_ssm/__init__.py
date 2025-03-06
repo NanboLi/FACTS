@@ -1,3 +1,3 @@
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
-from facts_ssm.modules import FACTS
+from facts_ssm.core import FACTS
