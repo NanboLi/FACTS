@@ -36,7 +36,7 @@ class SoftmaxAttentionRouter(nn.Module):
             norm_inputs:bool=True,
             proj_bias:bool=False,
             dropout:float=0., 
-            eps:float=1e-12):
+            eps:float=1e-8):
         super().__init__()
         self.K = num_slots
         self.D = dim
@@ -47,7 +47,7 @@ class SoftmaxAttentionRouter(nn.Module):
         assert aug_dim % dim == 0, f"aug_dim={aug_dim} must be multiples of dim, but dim={dim} now"
         self.attn_scale = self.head_dim ** -0.5
         self.dropout_p = dropout
-        self.eps = eps
+        self.eps = eps  # only used for inverted attention
 
         # norm inputs and queries
         self.norm_inputs = nn.LayerNorm(dim) if norm_inputs else nn.Identity()
