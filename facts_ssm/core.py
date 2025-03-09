@@ -107,7 +107,9 @@ class FACTS(nn.Module):
                  fast_mode: bool=True,
                  slim_mode: bool=False,
                  residual: bool=True,
-                 chunk_size: int=-1):
+                 chunk_size: int=-1,
+                 dt_bias: float=1e-4,
+                 eps: float=1e-12):
         """
         Initializes a FACTS model.
 
@@ -126,7 +128,9 @@ class FACTS(nn.Module):
             slim_mode (bool): whether to use slim mode. head_dim=slot_size//num_heads if slim_mode else head_dim=slot_size.
             C_rank (int): rank of the C projection (options: [0, 1, D]). 0 for no C-selective projection.
             residual (bool): whether to use residual connection, not supported for M != K     
-            chunk_size (int): chunk size for the chunked RNN/partial parallelisation: chunk_{t} = RNN(chunk_{t-1})    
+            chunk_size (int): chunk size for the chunked RNN/partial parallelisation: chunk_{t} = RNN(chunk_{t-1})
+            dt_bias (float): bias for the dt term, expected to be positive.
+            eps (float): small value for numerical stability/precision control.    
         """
         super().__init__()
         self.M = in_factors  # M
@@ -140,6 +144,8 @@ class FACTS(nn.Module):
             assert self.M == self.K, "In 'init_state' mode, M should be equal to K."
         self.init_method = init_method
         self.slim_mode = slim_mode
+        self.dt_bias = dt_bias
+        self.eps = eps
         
         # the ranks of the params:
         self.dt_rank = slot_size
@@ -176,7 +182,8 @@ class FACTS(nn.Module):
             aug_dim=param_dim,
             n_heads=num_heads,
             norm_inputs=True,
-            dropout=dropout
+            dropout=dropout,
+            eps=self.eps
         )
 
         if init_method == 'learnable':
@@ -293,7 +300,7 @@ class FACTS(nn.Module):
         else:
             dt, B = pe_params.split([self.dt_rank, self.B_rank], dim=-1)
             C = 1
-        dt = F.softplus(dt).expand(-1, -1, -1, self.slot_size)+1e-4  # [B, T, K, D]
+        dt = F.softplus(dt).expand(-1, -1, -1, self.slot_size) + self.dt_bias  #+1e-4  # [B, T, K, D]
 
         # Cumsum implementation for the Fast SSM
         dA_prod = F.pad(dt * A, (0, 0, 0, 0, 0, 1)).flip(1).cumsum(1).exp().flip(1)  # [B, T+1, K, D]
@@ -304,7 +311,7 @@ class FACTS(nn.Module):
         else:
             raise ValueError(f"Invalid z.size(1)={z.size(1)} != (1 or {t})")
         z = dB_u * dA_prod
-        z = z.cumsum(1) / (dA_prod + 1e-12)
+        z = z.cumsum(1) / (dA_prod + self.eps) #1e-12)
         z = z[:, 1:]  # [B, T, K, D]
         return z * C, z
 
