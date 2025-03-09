@@ -108,7 +108,7 @@ class FACTS(nn.Module):
                  slim_mode: bool=False,
                  residual: bool=True,
                  chunk_size: int=-1,
-                 dt_bias: float=1e-4,
+                 dt_bias: float=0.,
                  eps: float=1e-8):
         """
         Initializes a FACTS model.
