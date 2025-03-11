@@ -201,7 +201,7 @@ class FACTS(nn.Module):
         self.A_log = nn.Parameter(
             torch.log(torch.ones(self.A_rank))
         )
-        # self.A_log._no_weight_decay = True
+        self.A_log._no_weight_decay = True
 
     def init_memory(self, x: torch.Tensor, z: torch.Tensor=None):
         """Initialise the memory tensor.
@@ -299,7 +299,7 @@ class FACTS(nn.Module):
         else:
             dt, B = pe_params.split([self.dt_rank, self.B_rank], dim=-1)
             C = 1
-        dt = F.softplus(dt).expand(-1, -1, -1, self.slot_size) + self.dt_bias  # [B, T, K, D]
+        dt = F.softplus(dt + self.dt_bias).expand(-1, -1, -1, self.slot_size)   # [B, T, K, D]
 
         # Cumsum implementation for the Fast SSM
         dA_prod = F.pad(dt * A, (0, 0, 0, 0, 0, 1)).flip(1).cumsum(1).exp().flip(1)  # [B, T+1, K, D]
