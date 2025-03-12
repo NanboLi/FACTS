@@ -128,7 +128,7 @@ class FACTS(nn.Module):
             slim_mode (bool): whether to use slim mode. head_dim=slot_size//num_heads if slim_mode else head_dim=slot_size.
             C_rank (int): rank of the C projection (options: [0, 1, D]). 0 for no C-selective projection.
             residual (bool): whether to use residual connection, not supported for M != K     
-            chunk_size (int): chunk size for the chunked RNN/partial parallelisation: chunk_{t} = RNN(chunk_{t-1})
+            chunk_size (int): chunk size for parallelisation: chunk_{t} = RNN(chunk_{t-1}).
             dt_bias (float): bias for the dt term, expected to be positive.
             eps (float): small value for numerical stability/precision control.    
         """
@@ -272,7 +272,9 @@ class FACTS(nn.Module):
         return z_hat, z
     
     def ssm(self, x, z, pe_params, mask):
-        """Parallel SSM that models the dynamic graphs with temporal selectivity.
+        """Parallel SSM that models the dynamic graphs with temporal selectivity.  
+
+        (Note that large chunk_size can lead to numerical instability in the PyTorch cumsum operation. We are working on a more stable implementation.)
         
         Args:
             x (torch.Tensor): [B, T, M, D], input tensor.
