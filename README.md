@@ -19,7 +19,7 @@ PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Mo
     If you see `Good to go!`, you are Good to go!
 
 ## Usage:
-We provide only three examples to show its usage, for now, more details and [DEMOS](#demos) will be released later. Stay tuned, until then... 
+We provide only three examples to show its usage, for now, more details and [DEMOS](#demos) will be released later (with, hopefully, a *more efficient, [Triton](https://openai.com/index/triton/)-powered* implementation). Stay tuned, until then... 
 * Example 1 (very basic):
 ```
     import torch
