@@ -18,6 +18,7 @@ PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Mo
     ```
     If you see `Good to go!`, you are Good to go!
 
+
 ## Usage:
 We provide only three examples to show its usage, for now, more details and [DEMOS](#demos) will be released later (with, hopefully, a *more efficient, [Triton](https://openai.com/index/triton/)-powered* implementation). Stay tuned, until then... 
 * Example 1 (very basic):
@@ -89,7 +90,8 @@ We provide only three examples to show its usage, for now, more details and [DEM
 
 ## Demos:
 1. See [Multivariate Time Series Forecasting (MTSF)](./facts_ssm/demos/time_series/readme.md)
-2. coming soon ...
+2. For better efficiency, we are working on a triton implementation of the ssm scan operation. See a [beta version here](./facts_ssm/ssm_scan_triton_ops.py).
+3. coming soon ...
 
 
 ## Contact

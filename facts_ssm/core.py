@@ -13,6 +13,13 @@ import torch.nn.functional as F
 from einops import rearrange, repeat, einsum
 from facts_ssm.routers import build_router
 
+try:
+    from facts_ssm.ssm_scan_triton_ops import SSM_Scan
+    print(f"Using Triton for parallel SSM Scan.")
+except ImportError:
+    SSM_Scan = None
+    print(f"Loading Triton SSM failed, using PyTorch")
+
 
 # ============================
 # FACTS Core Modules
@@ -274,7 +281,8 @@ class FACTS(nn.Module):
     def ssm(self, x, z, pe_params, mask):
         """Parallel SSM that models the dynamic graphs with temporal selectivity.  
 
-        (Note that large chunk_size can lead to numerical instability in the PyTorch cumsum operation. We are working on a more stable implementation.)
+        (Note that large chunk_size can lead to numerical instability in the PyTorch cumsum operation. 
+        We recommend installing Triton for stable SSM_Scan.)
         
         Args:
             x (torch.Tensor): [B, T, M, D], input tensor.
@@ -302,18 +310,26 @@ class FACTS(nn.Module):
             dt, B = pe_params.split([self.dt_rank, self.B_rank], dim=-1)
             C = 1
         dt = F.softplus(dt + self.dt_bias).expand(-1, -1, -1, self.slot_size)   # [B, T, K, D]
+        dA = dt * A  # [B, T, K, D]
+        dBu = (dt*B)*u  # [B, T, K, D]
 
-        # Cumsum implementation for the Fast SSM
-        dA_prod = F.pad(dt * A, (0, 0, 0, 0, 0, 1)).flip(1).cumsum(1).exp().flip(1)  # [B, T+1, K, D]
-        if z.size(1) == 1:
-            dB_u = torch.cat((z, (dt*B)*u), dim=1)  # [B, T+1, K, D]
-        elif z.size(1) == t:
-            dB_u = F.pad((dt*B)*u, (0,0,0,0,1,0))  # [B, T+1, K, D]
+        if SSM_Scan is not None:
+            # Triton SSM Scan
+            z = SSM_Scan(dA.exp(), dBu)
         else:
-            raise ValueError(f"Invalid z.size(1)={z.size(1)} != (1 or {t})")
-        z = dB_u * dA_prod
-        z = z.cumsum(1) / (dA_prod + self.eps)
-        z = z[:, 1:]  # [B, T, K, D]
+            # Cumsum SSM Scan: may result in numerical instability for large chunk_size
+
+            dA_prod = F.pad(dA, (0, 0, 0, 0, 0, 1)).flip(1).cumsum(1).exp().flip(1)  # [B, T+1, K, D]
+            if z.size(1) == 1:
+                dBu = torch.cat((z, dBu), dim=1)  # [B, T+1, K, D]
+            elif z.size(1) == t:
+                dBu = F.pad(dBu, (0,0,0,0,1,0))  # [B, T+1, K, D]
+            else:
+                raise ValueError(f"Invalid z.size(1)={z.size(1)} != (1 or {t})")
+            z = dBu * dA_prod
+
+            z = z.cumsum(1) / (dA_prod + self.eps)
+            z = z[:, 1:]  # [B, T, K, D]
         return z * C, z
 
     def ssm_chunked_rnn(self, x, z, pe_params, mask):
