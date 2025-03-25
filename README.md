@@ -14,7 +14,7 @@ PyTorch Implementation of "[FACTS: A Factored State-Space Framework For World Mo
 3. (Optional) Test your installation:\
     Under ```FACTS/```, run
     ```
-        . demos/scripts/installation_test.sh
+        . _tests_/scripts/installation_test.sh
     ```
     If you see `Good to go!`, you are Good to go!
 
