@@ -90,7 +90,7 @@ We provide only three examples to show its usage, for now, more details and [DEM
 
 ## Demos:
 1. See [Multivariate Time Series Forecasting (MTSF)](./facts_ssm/demos/time_series/readme.md)
-2. For better efficiency, we are working on a triton implementation of the ssm scan operation. See a [beta version here](./facts_ssm/ssm_scan_triton_ops.py).
+2. For better efficiency, we are working on a triton implementation of the ssm scan operation. We now provide [an experimental version](./facts_ssm/ssm_scan_triton_ops.py).
 3. coming soon ...
 
 
