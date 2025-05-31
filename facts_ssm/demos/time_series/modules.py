@@ -110,7 +110,7 @@ class EncoderLayer(nn.Module):
                  expand: int=2,
                  num_heads: int=1, 
                  dropout: float=0., 
-                 activation="relu",
+                 activation="gelu",
                  norm_first: bool=True,
                  mode: str="normal"):
         super(EncoderLayer, self).__init__()
