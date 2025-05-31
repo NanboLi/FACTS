@@ -116,7 +116,7 @@ class FACTS(nn.Module):
                  residual: bool=True,
                  chunk_size: int=-1,
                  dt_bias: float=0.,
-                 eps: float=1e-8):
+                 eps: float=1e-5):
         """
         Initializes a FACTS model.
 
@@ -189,7 +189,8 @@ class FACTS(nn.Module):
             aug_dim=param_dim,
             n_heads=num_heads,
             norm_inputs=True,
-            dropout=dropout
+            dropout=dropout,
+            eps=self.eps,
         )
 
         if init_method == 'learnable':

@@ -36,7 +36,7 @@ class SoftmaxAttentionRouter(nn.Module):
             norm_inputs:bool=True,
             proj_bias:bool=False,
             dropout:float=0., 
-            eps:float=1e-8):
+            eps:float=1e-7):
         super().__init__()
         self.K = num_slots
         self.D = dim
