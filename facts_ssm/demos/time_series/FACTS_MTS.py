@@ -3,9 +3,9 @@ FACTS for Multivariate Time Series (MTS) Tasks: FACTS_MTS.
 
 The structure of FACTS_MTS is adapted from the TSLib code base:
     https://github.com/thuml/Time-Series-Library
-Though due to version changes, the code below might not be directly 
-compatible with the original TSLib anymore. We will try to close the 
-gap in our future release.
+Though due to recent and frequent version changes in TSLib, the code 
+below may no longer be fully compatible with the original TSLib 
+anymore. We aim to fix this in a future release.
 
 Any use of this code should cite the following paper:
     FACTS: A Factored State-Space Framework For World Modelling
@@ -33,7 +33,12 @@ class FACTS_MTS(nn.Module):
 
         # preprocessing layers - DataEmbedding
         self.rev_in = RevIN(configs.enc_in, self.eps) if configs.rev_in else None
-        self.embedder = SetEmbedder(configs)
+        self.embedder = SetEmbedder(
+            enc_in=configs.enc_in,
+            slot_size=configs.slot_size,
+            decomp_method=configs.decomp_method,
+            dropout=configs.dropout
+        )
 
         # FACTS encoder
         if configs.mk_setup == 'mmk':
@@ -60,7 +65,8 @@ class FACTS_MTS(nn.Module):
                         fast_mode=(configs.fast_mode==1) if el==(configs.e_layers-1) else True,
                         slim_mode=(configs.slim_mode==1),
                         residual=(n_facts_arr[el]==n_facts_arr[el+1]),
-                        chunk_size=configs.chunk_size
+                        chunk_size=configs.chunk_size,
+                        eps=eps,
                     ), 
                     expand=configs.expand,
                     num_heads=configs.n_heads,

@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
-from facts_ssm import FACTS
+# from facts_ssm import FACTS
 # from facts_ssm.utils import RMSNorm
 from typing import Dict, List
 
@@ -74,25 +74,31 @@ class MSConv2dDecomp(nn.Module):
 
 # >> Set Embedder <<
 class SetEmbedder(nn.Module):
-    def __init__(self, configs):
+    def __init__(
+            self, 
+            enc_in: int,
+            slot_size: int,
+            decomp_method: str="ms_conv2d",
+            dropout: float=0.0
+        ):
         super(SetEmbedder, self).__init__()
-        assert configs.decomp_method in ["dft", "ms_conv2d", "conv2d"], "Invalid decoder method."
-        if configs.decomp_method == "dft":
+        assert decomp_method in ["dft", "ms_conv2d", "conv2d"], "Invalid decoder method."
+        if decomp_method == "dft":
             raise NotImplementedError
-        elif configs.decomp_method == "conv2d":
+        elif decomp_method == "conv2d":
             self.decomposer = Conv2dDecomp(
-                1, configs.slot_size  # // 2
+                1, slot_size  # // 2
             )
         else:
             self.decomposer = MSConv2dDecomp(
-                in_channels=configs.enc_in,
+                in_channels=enc_in,
                 kernels=[2, 4, 8, 16, 32],
                 max_ws=64
             )
         decomp_dim = self.decomposer.stack_dim
-        self.feat_proj = nn.Linear(decomp_dim, configs.slot_size, bias=False)  
-        self.feat_dropout = nn.Dropout(configs.dropout)
-        self.feat_norm = nn.LayerNorm(configs.slot_size)
+        self.feat_proj = nn.Linear(decomp_dim, slot_size, bias=False)  
+        self.feat_dropout = nn.Dropout(dropout)
+        self.feat_norm = nn.LayerNorm(slot_size)
 
     def forward(self, x):
         # x: [B, T, M] -> [B, D, T, M]
