@@ -23,7 +23,7 @@ class Model(FACTS_MTS):
    def __init__(self, configs):
       super().__init__(configs)
 ```
-. After this, one needs to configure ```Time-Series-Library/exp/exp_basic.py``` and ```Time-Series-Library/run.py``` accordingly to ensure compatiability. We will also try to provide a bridge as a walk-around in a future release.
+. After this, one needs to configure ```Time-Series-Library/exp/exp_basic.py``` and ```Time-Series-Library/run.py``` accordingly to ensure compatibility. We will also try to provide a bridge as a walk-around in a future release.
 
 
 (Updating...)
